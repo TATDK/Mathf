@@ -51,7 +51,7 @@ public class Mathf {
     public static float PingPong(float t,float length) { return UnityEngine.Mathf.PingPong(t,length); }
     public static float Pow(float f,float p) { return UnityEngine.Mathf.Pow(f,p); }
     public static float Repeat(float t,float length) { return UnityEngine.Mathf.Repeat(t,length); }
-    public static bool RoughlyEqual (float a,float b,float threshold) { return UnityEngine.Mathf.Abs(a - b) < threshold; }
+    public static bool RoughlyEqual (float a,float b,float threshold) { return UnityEngine.Mathf.Abs(a - b) <= threshold; }
     public static float Round(float f) { return UnityEngine.Mathf.Round(f); }
     public static int RoundToInt(float f) { return UnityEngine.Mathf.RoundToInt(f); }
     public static float Sign(float f) { return UnityEngine.Mathf.Sign(f); }
