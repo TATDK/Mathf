@@ -7,6 +7,7 @@ public class Mathf {
     public const float NegativeInfinity = UnityEngine.Mathf.NegativeInfinity;
     public const float Rad2Deg = UnityEngine.Mathf.Rad2Deg;
     public const float PI = UnityEngine.Mathf.PI;
+    public const float TAU = UnityEngine.Mathf.PI*2;
 
     public static int Abs(int a) { return UnityEngine.Mathf.Abs(a); }
     public static float Abs(float a) { return UnityEngine.Mathf.Abs(a); }
