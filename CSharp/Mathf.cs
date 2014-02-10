@@ -144,6 +144,13 @@ namespace CSharp {
         /// <param name="a">The value</param>
         public static int FloorToInt(float a) { return (int)Floor(a); }
         /// <summary>
+        /// Returns if the value is powered by two.
+        /// </summary>
+        /// <param name="value">A value</param>
+        public static bool IsPowerOfTwo(int value) {
+            return (value > 0) && ((value & (value - 1)) == 0);
+        }
+        /// <summary>
         /// Interpolates between from and to by t. t is clamped between 0 and 1.
         /// </summary>
         /// <param name="from">The from value</param>
