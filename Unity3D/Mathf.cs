@@ -3,13 +3,17 @@
 namespace Unity3D {
     public class Mathf {
         public const float Deg2Rad = UnityEngine.Mathf.Deg2Rad;
+        public const float Deg2Grad = 1.1111111f;
         public const float Epsilon = UnityEngine.Mathf.Epsilon;
         public const float ExponentialE = 2.71828f;
         public const float GoldenRatio = 1.61803f;
+        public const float Grad2Deg = 0.9f;
+        public const float Grad2Rad = 0.015708f;
         public const float Infinity = UnityEngine.Mathf.Infinity;
         public const float NegativeInfinity = UnityEngine.Mathf.NegativeInfinity;
         public const float PI = UnityEngine.Mathf.PI;
         public const float Rad2Deg = UnityEngine.Mathf.Rad2Deg;
+        public const float Rad2Grad = 63.6619772f;
         public const float TAU = UnityEngine.Mathf.PI * 2;
 
         public static int Abs(int a) { return UnityEngine.Mathf.Abs(a); }

@@ -10,6 +10,10 @@ namespace CSharp {
         /// </summary>
         public const float Deg2Rad = 0.0174533f;
         /// <summary>
+        /// Degrees-to-grad conversion constant.
+        /// </summary>
+        public const float Deg2Grad = 1.1111111f;
+        /// <summary>
         /// A tiny floating point value.
         /// </summary>
         public const float Epsilon = 1.4013e-045f;
@@ -21,6 +25,14 @@ namespace CSharp {
         /// The golden ratio. Oooooh!
         /// </summary>
         public const float GoldenRatio = 1.61803f;
+        /// <summary>
+        /// Grad-to-degrees conversion constant.
+        /// </summary>
+        public const float Grad2Deg = 0.9f;
+        /// <summary>
+        /// Grad-to-radians conversion constant.
+        /// </summary>
+        public const float Grad2Rad = 0.015708f;
         /// <summary>
         /// A representation of positive infinity.
         /// </summary>
@@ -37,6 +49,10 @@ namespace CSharp {
         /// Radians-to-degrees conversion constant.
         /// </summary>
         public const float Rad2Deg = 57.2958f;
+        /// <summary>
+        /// Radians-to-grad conversion constant.
+        /// </summary>
+        public const float Rad2Grad = 63.6619772f;
         /// <summary>
         /// The not-so-infamous TAU value.
         /// </summary>
