@@ -78,7 +78,7 @@ namespace CSharp {
         /// </summary>
         /// <param name="a">First value</param>
         /// <param name="b">Second value</param>
-        public static bool Approximately(float a,float b) { return RoughlyEqual(a,b,0.1f); }
+        public static bool Approximately(float a, float b) { return RoughlyEqual(a, b, 0.1f); }
         /// <summary>
         /// Returns the arc-sine of a - the angle in radians whose sine is a.
         /// </summary>
@@ -94,7 +94,7 @@ namespace CSharp {
         /// </summary>
         /// <param name="y">The y value</param>
         /// <param name="x">The x value</param>
-        public static float Atan2(float y,float x) { return (float)Math.Atan2(y,x); }
+        public static float Atan2(float y, float x) { return (float)Math.Atan2(y, x); }
         /// <summary>
         /// Returns the smallest integer greater to or equal to a.
         /// </summary>
@@ -111,8 +111,8 @@ namespace CSharp {
         /// <param name="value">The value</param>
         /// <param name="min">The minimum value</param>
         /// <param name="max">The maximum value</param>
-        public static int Clamp(int value,int min,int max) {
-            return (int)Clamp(value,min,max);
+        public static int Clamp(int value, int min, int max) {
+            return (int)Clamp((float)value, (float)min, (float)max);
         }
         /// <summary>
         /// Clamps a value between a minimum float and maximum float value.
@@ -120,7 +120,7 @@ namespace CSharp {
         /// <param name="value">The value</param>
         /// <param name="min">The minimum value</param>
         /// <param name="max">The maximum value</param>
-        public static float Clamp(float value,float min,float max) {
+        public static float Clamp(float value, float min, float max) {
             if (max <= min)
                 return min;
             return value < min ? min : value > max ? max : value;
@@ -136,7 +136,7 @@ namespace CSharp {
         /// <param name="a">The value</param>
         public static int ClosestPowerOfTwo(int a) {
             int b = NextPowerOfTwo(a),
-                c = b/2;
+                c = b / 2;
             return a - c < b - a ? c : b;
         }
         /// <summary>
@@ -172,7 +172,7 @@ namespace CSharp {
         /// <param name="from">The from value</param>
         /// <param name="to">The to value</param>
         /// <param name="t">The t value</param>
-        public static float Lerp(float from,float to,float t) { return t >= 1 ? to : t < 0 ? from : from + (to - from) * t; }
+        public static float Lerp(float from, float to, float t) { return t >= 1 ? to : t < 0 ? from : from + (to - from) * t; }
         /// <summary>
         /// Returns the natural (base e) logarithm of a specified value.
         /// </summary>
@@ -188,25 +188,25 @@ namespace CSharp {
         /// </summary>
         /// <param name="a">First value</param>
         /// <param name="b">Second value</param>
-        public static int Max(int a,int b) { return Math.Max(a,b); }
+        public static int Max(int a, int b) { return Math.Max(a, b); }
         /// <summary>
         /// Returns the largest of two float values.
         /// </summary>
         /// <param name="a">First value</param>
         /// <param name="b">Second value</param>
-        public static float Max(float a,float b) { return Math.Max(a,b); }
+        public static float Max(float a, float b) { return Math.Max(a, b); }
         /// <summary>
         /// Returns the smaller of two integer values.
         /// </summary>
         /// <param name="a">First value</param>
         /// <param name="b">Second value</param>
-        public static int Min(int a,int b) { return Math.Min(a,b); }
+        public static int Min(int a, int b) { return Math.Min(a, b); }
         /// <summary>
         /// Returns the smaller of two float values.
         /// </summary>
         /// <param name="a">First value</param>
         /// <param name="b">Second value</param>
-        public static float Min(float a,float b) { return Math.Min(a,b); }
+        public static float Min(float a, float b) { return Math.Min(a, b); }
         /// <summary>
         /// Get the next power of two after a value.
         /// </summary>
@@ -226,7 +226,7 @@ namespace CSharp {
         /// </summary>
         /// <param name="f">The value to raise</param>
         /// <param name="p">The power</param>
-        public static float Pow(float f,float p) { return (float)Math.Pow(f,p); }
+        public static float Pow(float f, float p) { return (float)Math.Pow(f, p); }
         /// <summary>
         /// Compares two floating point values if they are similar.
         /// </summary>
@@ -234,7 +234,7 @@ namespace CSharp {
         /// <param name="b">Second value</param>
         /// <param name="threshold">The threshold of similarity</param>
         /// <returns>True if the values are similar, otherwise false.</returns>
-        public static bool RoughlyEqual(float a,float b,float threshold = 0.01f) { return Mathf.Abs(a - b) <= threshold; }
+        public static bool RoughlyEqual(float a, float b, float threshold = 0.01f) { return Mathf.Abs(a - b) <= threshold; }
         /// <summary>
         /// Returns f rounded to the nearest integer.
         /// </summary>
@@ -245,14 +245,14 @@ namespace CSharp {
         /// </summary>
         /// <param name="f">The value</param>
         /// <param name="decimals">The number of fractional digits to round to</param>
-        public static float Round(float f,int decimals) { return (float)Math.Round(f,decimals); }
+        public static float Round(float f, int decimals) { return (float)Math.Round(f, decimals); }
         /// <summary>
         /// Rounds a floating-point value to a specified number of fractional digits. A parameter specifies how to round a value if it is midway between two other numbers.
         /// </summary>
         /// <param name="f">The value</param>
         /// <param name="decimals">The number of fractional digits to round to</param>
         /// <param name="mode">The rounding mode to use</param>
-        public static float Round(float f,int decimals,MidpointRounding mode) { return (float)Math.Round(f,decimals,mode); }
+        public static float Round(float f, int decimals, MidpointRounding mode) { return (float)Math.Round(f, decimals, mode); }
         /// <summary>
         /// Returns f rounded to the nearest integer.
         /// </summary>
@@ -263,14 +263,14 @@ namespace CSharp {
         /// </summary>
         /// <param name="f">The value</param>
         /// <param name="decimals">The number of fractional digits to round to</param>
-        public static int RoundToInt(float f,int decimals) { return (int)Round(f,decimals); }
+        public static int RoundToInt(float f, int decimals) { return (int)Round(f, decimals); }
         /// <summary>
         /// Rounds a floating-point value to a specified number of fractional digits. A parameter specifies how to round a value if it is midway between two other numbers. Except not. This method makes no sense.
         /// </summary>
         /// <param name="f">The value</param>
         /// <param name="decimals">The number of fractional digits to round to</param>
         /// <param name="mode">The rounding mode to use</param>
-        public static int RoundToInt(float f,int decimals,MidpointRounding mode) { return (int)Round(f,decimals,mode); }
+        public static int RoundToInt(float f, int decimals, MidpointRounding mode) { return (int)Round(f, decimals, mode); }
         /// <summary>
         /// Returns the sign of f.
         /// </summary>
