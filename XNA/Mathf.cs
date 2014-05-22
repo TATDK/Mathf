@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace CSharp {
+namespace XNA {
     /// <summary>
     /// Provides constants and static methods for trigonometric, logarithmic and other common mathematical functions.
     /// </summary>
@@ -164,9 +166,7 @@ namespace CSharp {
         /// Returns if the value is powered by two.
         /// </summary>
         /// <param name="value">A value</param>
-        public static bool IsPowerOfTwo(int value) {
-            return (value > 0) && ((value & (value - 1)) == 0);
-        }
+        public static bool IsPowerOfTwo(int value) { return (value > 0) && ((value & (value - 1)) == 0); }
         /// <summary>
         /// Interpolates between from and to by t. t is clamped between 0 and 1.
         /// </summary>
@@ -219,16 +219,6 @@ namespace CSharp {
         /// <param name="b">Second value</param>
         public static float Min(float a, float b) { return Math.Min(a, b); }
         /// <summary>
-        /// Returns the smallest of a set of integer values.
-        /// </summary>
-        /// <param name="values">The set of values</param>
-        public static int Min(params int[] values) { return values.Min(); }
-        /// <summary>
-        /// Returns the smallest of a set of float values.
-        /// </summary>
-        /// <param name="values">The set of values</param>
-        public static float Min(params float[] values) { return values.Min(); }
-        /// <summary>
         /// Get the next power of two after a value.
         /// </summary>
         /// <param name="a">The value</param>
@@ -280,18 +270,11 @@ namespace CSharp {
         /// <param name="f">The value to round</param>
         public static int RoundToInt(float f) { return (int)Round(f); }
         /// <summary>
-        ///  Rounds a floating-point value to a specified number of fractional digits. Except not. This method makes no sense.
+        ///  Rounds a floating-point value. A parameter specifies how to round a value if it is midway between two other numbers.
         /// </summary>
         /// <param name="f">The value</param>
-        /// <param name="decimals">The number of fractional digits to round to</param>
-        public static int RoundToInt(float f, int decimals) { return (int)Round(f, decimals); }
-        /// <summary>
-        /// Rounds a floating-point value to a specified number of fractional digits. A parameter specifies how to round a value if it is midway between two other numbers. Except not. This method makes no sense.
-        /// </summary>
-        /// <param name="f">The value</param>
-        /// <param name="decimals">The number of fractional digits to round to</param>
         /// <param name="mode">The rounding mode to use</param>
-        public static int RoundToInt(float f, int decimals, MidpointRounding mode) { return (int)Round(f, decimals, mode); }
+        public static int RoundToInt(float f, MidpointRounding mode) { return (int)Round(f, 0, mode); }
         /// <summary>
         /// Returns the sign of f.
         /// </summary>
@@ -312,5 +295,233 @@ namespace CSharp {
         /// </summary>
         /// <param name="f">The value</param>
         public static float Tan(float f) { return (float)Math.Tan(f); }
+        /// <summary>
+        /// Rotates one point around another
+        /// </summary>
+        /// <param name="pointToRotate">The point to rotate.</param>
+        /// <param name="centerPoint">The centre point of rotation.</param>
+        /// <param name="angleInDegrees">The rotation angle in degrees.</param>
+        /// <returns>Rotated point</returns>
+        public static Vector2 RotatePoint(Vector2 pointToRotate, Vector2 centerPoint, float angleInDegrees) {
+            float angleInRadians = angleInDegrees * Mathf.Deg2Rad;
+            float cosTheta = Mathf.Cos(angleInRadians);
+            float sinTheta = Mathf.Sin(angleInRadians);
+            return new Vector2 {
+                X = (cosTheta * (pointToRotate.X - centerPoint.X) -
+                    sinTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.X),
+                Y = (sinTheta * (pointToRotate.X - centerPoint.X) +
+                    cosTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.Y)
+            };
+        }
+        /// <summary>
+        /// Calculates the average of a series of float values.
+        /// </summary>
+        /// <returns>The average value.</returns>
+        public static float Average(params float[] values) {
+            return values.Average();
+        }
+
+        /// <summary>
+        /// Calculates the average of a series of Vector2 values.
+        /// </summary>
+        /// <returns>The average value.</returns>
+        public static Vector2 Average(params Vector2[] values) {
+            Vector2 result = Vector2.Zero;
+
+            foreach (var value in values)
+                result += value;
+
+            return result / values.Length;
+        }
+
+        #region Polygon Math
+        /// <summary>
+        /// Checks whether a given line intersects with a given polygon and returns the intersections points in an out parameter.
+        /// </summary>
+        /// <param name="points">The points defining the polygon.</param>
+        /// <param name="a">Starting point of the line.</param>
+        /// <param name="b">Ending point of the line.</param>
+        /// <param name="intersections">The out parameter which contains the intersections points with the PolygonCollider if there were any.</param>
+        /// <returns>True if the line intersects the PolygonCollider, otherwise false.</returns>
+        public static bool LineIntersectsPolygon(Vector2[] points, Vector2 a, Vector2 b, out List<Vector2> intersections) {
+            intersections = new List<Vector2>();
+
+            Vector2 result;
+
+            for (int i = 0;i < points.Length;i++)
+                if (LineIntersectsLine(a, b, points[i], points[(i + 1) % points.Length], out result))
+                    intersections.Add(result);
+
+            return intersections.Count > 0;
+        }
+
+        /// <summary>
+        /// Checks whether a given point is within an array of given points.
+        /// </summary>
+        /// <param name="point">The point to check.</param>
+        /// <param name="points">The points defining the polygon to check within.</param>
+        /// <returns>True if the point is within the PolygonCollider, otherwise false.</returns>
+        public static bool PointInPolygon(Vector2 point, Vector2[] points) {
+            List<Vector2> result;
+
+            if (LineIntersectsPolygon(points, point, point - new Vector2(-1000000, 0), out result)) {
+                if (result.Count % 2 == 0)
+                    return false;
+                else
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Checks whether two given polygons intersect one another.
+        /// </summary>
+        /// <param name="aPoints">One polygon.</param>
+        /// <param name="bPoints">The other polygon.</param>
+        /// <returns>True if the two polygons intersect, otherwise false.</returns>
+        public static bool PolygonIntersectsPolygon(Vector2[] aPoints, Vector2[] bPoints) {
+            Vector2 result;
+
+            // This is probably pretty inefficient
+            if (PointInPolygon(Average(aPoints), bPoints) ||
+                PointInPolygon(Average(bPoints), aPoints))
+                return true;
+
+            for (int i1 = 0;i1 < aPoints.Length;i1++)
+                for (int i2 = 0;i2 < bPoints.Length;i2++)
+                    if (LineIntersectsLine(aPoints[i1],
+                                            aPoints[(i1 + 1) % aPoints.Length],
+                                            bPoints[i2],
+                                            bPoints[(i2 + 1) % bPoints.Length],
+                                            out result))
+                        return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Checks whether a given circle intersects with a given polygon.
+        /// </summary>
+        public static bool CircleIntersectsPolygon(Vector2 center, float radius, Vector2[] polygon) {
+            if (PointInPolygon(center, polygon))
+                return true;
+
+            for (int i = 0;i < polygon.Length;i++)
+                if (LineIntersectsCircle(center, radius, polygon[i], polygon[(i + 1) % polygon.Length]))
+                    return true;
+
+            return false;
+        }
+
+        private static float DistanceToLine(Vector2 point, Vector2 a, Vector2 b) {
+            float l2 = (b - a).LengthSquared();
+            if (l2 == 0.0)
+                return Vector2.Distance(point, a);
+            float t = Vector2.Dot(point - a, b - a) / l2;
+            if (t < 0.0)
+                return Vector2.Distance(point, a);
+            else if (t > 1.0)
+                return Vector2.Distance(point, b);
+            Vector2 projection = a + t * (b - a);
+            return Vector2.Distance(point, projection);
+        }
+
+        /// <summary>
+        /// Checks whether a given line intersects with a given circle.
+        /// </summary>
+        public static bool LineIntersectsCircle(Vector2 center, float radius, Vector2 a, Vector2 b) {
+            float dist = DistanceToLine(center, a, b);
+
+            return dist <= radius;
+        }
+        /// <summary>
+        /// Checks whether a given line intersects with a given CircleCollider and returns the intersections points in an out parameter.
+        /// </summary>
+        public static bool LineIntersectsCircle(Vector2 center, float radius, Vector2 a, Vector2 b, out List<Vector2> intersects) {
+            intersects = new List<Vector2>();
+
+            if (!LineIntersectsCircle(center, radius, a, b))
+                return false;
+
+            float dx, dy, A, B, C, det, t;
+
+            dx = b.X - a.X;
+            dy = b.Y - a.Y;
+
+            A = dx * dx + dy * dy;
+            B = 2 * (dx * (a.X - center.X) + dy * (a.Y - center.Y));
+            C = (a.X - center.X) * (a.X - center.X) + (a.Y - center.Y) * (a.Y - center.Y) - radius * radius;
+
+            det = B * B - 4 * A * C;
+
+            if (A <= 0.0000001 || det < 0)
+                // No solutions
+                return false;
+            else if (det == 0) {
+                // One solution
+                t = -B / (2 * A);
+
+                if (0 <= t && t <= 1)
+                    intersects.Add(new Vector2(a.X + t * dx, a.Y + t * dy));
+            } else {
+                // Two solutions
+                t = (-B + Mathf.Sqrt(det)) / (2 * A);
+                if (0 <= t && t <= 1)
+                    intersects.Add(new Vector2(a.X + t * dx, a.Y + t * dy));
+                t = (-B - Mathf.Sqrt(det)) / (2 * A);
+                if (0 <= t && t <= 1)
+                    intersects.Add(new Vector2(a.X + t * dx, a.Y + t * dy));
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Checks if two given lines intersect with one another and returns the intersection point (if any) in an out parameter.
+        /// Source: http://stackoverflow.com/questions/3746274/line-intersection-with-aabb-rectangle.
+        /// Edited to implement Cohen-Sutherland type pruning for efficiency.
+        /// </summary>
+        /// <param name="a1">Starting point of line a.</param>
+        /// <param name="a2">Ending point of line a.</param>
+        /// <param name="b1">Starting point of line b.</param>
+        /// <param name="b2">Ending point of line b.</param>
+        /// <param name="intersection">The out parameter which contains the intersection point if there was any.</param>
+        /// <returns>True if the two lines intersect, otherwise false.</returns>
+        public static bool LineIntersectsLine(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2, out Vector2 intersection) {
+            intersection = Vector2.Zero;
+
+            Vector2 bLowerLeft = new Vector2(b1.X < b2.X ? b1.X : b2.X, b1.Y > b2.Y ? b1.Y : b2.Y);
+            Vector2 bUpperRight = new Vector2(b1.X > b2.X ? b1.X : b2.X, b1.Y < b2.Y ? b1.Y : b2.Y);
+
+            if ((a1.X < bLowerLeft.X && a2.X < bLowerLeft.X)
+                || (a1.Y > bLowerLeft.Y && a2.Y > bLowerLeft.Y)
+                || (a1.X > bUpperRight.X && a2.X > bUpperRight.X)
+                || (a1.Y < bUpperRight.Y && a2.Y < bUpperRight.Y))
+                return false;
+
+            Vector2 b = a2 - a1;
+            Vector2 d = b2 - b1;
+
+            float bDotDPerp = b.X * d.Y - b.Y * d.X;
+
+            // If b dot d == 0, it means the lines are parallel and have infinite intersection points
+            if (bDotDPerp == 0)
+                return false;
+
+            Vector2 c = b1 - a1;
+            float t = (c.X * d.Y - c.Y * d.X) / bDotDPerp;
+            if (t < 0 || t > 1)
+                return false;
+
+            float u = (c.X * b.Y - c.Y * b.X) / bDotDPerp;
+            if (u < 0 || u > 1)
+                return false;
+
+            intersection = a1 + t * b;
+
+            return true;
+        }
+        #endregion
     }
 }
